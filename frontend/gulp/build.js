@@ -1,0 +1,108 @@
+'use strict';
+
+var path = require('path');
+var gulp = require('gulp');
+var conf = require('./conf');
+
+var $ = require('gulp-load-plugins')({
+  pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
+});
+
+gulp.task('partials', function () {
+  return gulp.src([
+    path.join(conf.paths.src, '/app/**/*.html'),
+    path.join(conf.paths.tmp, '/serve/app/**/*.html')
+  ])
+    .pipe($.htmlmin({
+      removeEmptyAttributes: true,
+      removeAttributeQuotes: true,
+      collapseBooleanAttributes: true,
+      collapseWhitespace: true
+    }))
+    .pipe($.angularTemplatecache('templateCacheHtml.js', {
+      module: 'seabird',
+      root: 'app'
+    }))
+    .pipe(gulp.dest(conf.paths.tmp + '/partials/'));
+});
+
+gulp.task('html', ['inject', 'partials'], function () {
+  var partialsInjectFile = gulp.src(path.join(conf.paths.tmp, '/partials/templateCacheHtml.js'), {read: false});
+  var partialsInjectOptions = {
+    starttag: '<!-- inject:partials -->',
+    ignorePath: path.join(conf.paths.tmp, '/partials'),
+    addRootSlash: false
+  };
+
+  var htmlFilter = $.filter('*.html', {restore: true});
+  var jsFilter = $.filter('**/*.js', {restore: true});
+  var cssFilter = $.filter('**/*.css', {restore: true});
+
+  return gulp.src(path.join(conf.paths.tmp, '/serve/*.html'))
+    .pipe($.inject(partialsInjectFile, partialsInjectOptions))
+    .pipe($.useref())
+    .pipe(jsFilter)
+    .pipe($.sourcemaps.init())
+    .pipe($.uglify({preserveComments: $.uglifySaveLicense})).on('error', conf.errorHandler('Uglify'))
+    .pipe($.rev())
+    .pipe($.sourcemaps.write('maps'))
+    .pipe(jsFilter.restore)
+    .pipe(cssFilter)
+    // .pipe($.sourcemaps.init())
+    .pipe($.replace('../../bower_components/bootstrap/fonts/', '../fonts/'))
+    .pipe($.replace('../../bower_components/font-awesome/fonts/', '../fonts/'))
+    .pipe($.replace('../../bower_components/open-sans-fontface/fonts/Bold/', '../fonts/'))
+    .pipe($.replace('../../bower_components/open-sans-fontface/fonts/BoldItalic/', '../fonts/'))
+    .pipe($.replace('../../bower_components/open-sans-fontface/fonts/ExtraBold/', '../fonts/'))
+    .pipe($.replace('../../bower_components/open-sans-fontface/fonts/ExtraBoldItalic/', '../fonts/'))
+    .pipe($.replace('../../bower_components/open-sans-fontface/fonts/Italic/', '../fonts/'))
+    .pipe($.replace('../../bower_components/open-sans-fontface/fonts/Light/', '../fonts/'))
+    .pipe($.replace('../../bower_components/open-sans-fontface/fonts/LightItalic/', '../fonts/'))
+    .pipe($.replace('../../bower_components/open-sans-fontface/fonts/Regular/', '../fonts/'))
+    .pipe($.replace('../../bower_components/open-sans-fontface/fonts/Semibold/', '../fonts/'))
+    .pipe($.replace('../../bower_components/open-sans-fontface/fonts/SemiboldItalic/', '../fonts/'))
+    .pipe($.replace('../../bower_components/reboto-fontface/fonts/roboto/', '../fonts/'))
+    .pipe($.cssnano())
+    .pipe($.rev())
+    // .pipe($.sourcemaps.write('maps'))
+    .pipe(cssFilter.restore)
+    .pipe($.revReplace())
+    .pipe(htmlFilter)
+    .pipe($.htmlmin({
+      removeEmptyAttributes: true,
+      removeAttributeQuotes: true,
+      collapseBooleanAttributes: true,
+      collapseWhitespace: true
+    }))
+    .pipe(htmlFilter.restore)
+    .pipe(gulp.dest(path.join(conf.paths.dist, '/')))
+    .pipe($.size({title: path.join(conf.paths.dist, '/'), showFiles: true}));
+});
+
+// Only applies for fonts from bower dependencies
+// Custom fonts are handled by the "other" task
+gulp.task('fonts', function () {
+  return gulp.src($.mainBowerFiles())
+    .pipe($.filter('**/*.{eot,otf,svg,ttf,woff,woff2}'))
+    .pipe($.flatten())
+    .pipe(gulp.dest(path.join(conf.paths.dist, '/fonts/')));
+});
+
+gulp.task('other', function () {
+  var fileFilter = $.filter(function (file) {
+    return file.stat.isFile();
+  });
+
+  return gulp.src([
+    path.join(conf.paths.src, '/**/*'),
+    path.join('!' + conf.paths.src, '/**/*.{html,css,js,less}')
+  ])
+    .pipe(fileFilter)
+    .pipe(gulp.dest(path.join(conf.paths.dist, '/')));
+});
+
+gulp.task('clean', function () {
+  return $.del([path.join(conf.paths.dist, '/'), path.join(conf.paths.tmp, '/')]);
+});
+
+gulp.task('build', ['html', 'fonts', 'other']);

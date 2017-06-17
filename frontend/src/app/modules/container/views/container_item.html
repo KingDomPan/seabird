@@ -1,0 +1,223 @@
+<div class="wrapper wrapper-content">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="pull-right">
+        <button ng-if="!container.State.Running" class="btn btn-success btn-md" type="button" ng-click="startContainer(container)">启动</button>
+        <button ng-if="container.State.Running" class="btn btn-warning btn-md" type="button" ng-click="stopContainer(container)">停止</button>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>容器</h5>
+        </div>
+        <div class="ibox-content">
+          <table datatable="ng" class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+              <tr>
+                <th>属性</th>
+                <th>值</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="(key, value) in container">
+                <td>{{ ::key }}</td>
+                <td>{{ ::value }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>容器进程</h5>
+        </div>
+        <div class="ibox-content">
+          <table datatable="ng" class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+              <th>{{ ::'pid'}}</th>
+              <th>{{ ::'user' }}</th>
+              <th>{{ ::'time' }}</th>
+              <th>{{ ::'command' }}</th>
+            </thead>
+            <tbody>
+              <tr ng-repeat="processe in processes">
+                <td>{{ processe[0] }}</td>
+                <td>{{ processe[1] }}</td>
+                <td>{{ processe[2] }}</td>
+                <td>{{ processe[3] }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--<div class="row">-->
+  <!--<div class="col-lg-12">-->
+  <!--<div class="ibox float-e-margins">-->
+  <!--<div class="ibox-title">-->
+  <!--<h5>容器资源</h5>-->
+  <!--</div>-->
+  <!--<div class="ibox-content">-->
+  <!--<table datatable="ng" class="table table-striped table-bordered table-hover dataTables-example">-->
+  <!--<thead>-->
+  <!--<tr>-->
+  <!--<th>属性</th>-->
+  <!--<th>值</th>-->
+  <!--</tr>-->
+  <!--</thead>-->
+  <!--<tbody>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'read' }}</td>-->
+  <!--<td>{{ ::stats.read }}</td>-->
+  <!--</tr>-->
+
+  <!--<tr>-->
+  <!--<td>{{ ::'network_rx_bytes' }}</td>-->
+  <!--<td>{{ ::stats.network.rx_bytes }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'network_rx_packets' }}</td>-->
+  <!--<td>{{ ::stats.network.rx_packets }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'network_rx_errors' }}</td>-->
+  <!--<td>{{ ::stats.network.rx_errors }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'network_rx_dropped' }}</td>-->
+  <!--<td>{{ ::stats.network.rx_dropped }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'network_tx_bytes' }}</td>-->
+  <!--<td>{{ ::stats.network.tx_bytes }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'network_tx_packets' }}</td>-->
+  <!--<td>{{ ::stats.network.tx_packets }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'network_tx_errors' }}</td>-->
+  <!--<td>{{ ::stats.network.tx_errors }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'network_tx_dropped' }}</td>-->
+  <!--<td>{{ ::stats.network.tx_dropped }}</td>-->
+  <!--</tr>-->
+
+  <!--<tr>-->
+  <!--<td>{{ ::'cpu_total_usage' }}</td>-->
+  <!--<td>{{ ::stats.cpu_stats.cpu_usage.total_usage }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'cpu_usage_in_kernelmode' }}</td>-->
+  <!--<td>{{ ::stats.cpu_stats.cpu_usage.usage_in_kernelmode }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'cpu_usage_in_usermode' }}</td>-->
+  <!--<td>{{ ::stats.cpu_stats.cpu_usage.usage_in_usermode }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'cpu_system_cpu_usage' }}</td>-->
+  <!--<td>{{ ::stats.cpu_stats.system_cpu_usage }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'cpu_throttling_periods' }}</td>-->
+  <!--<td>{{ ::stats.cpu_stats.throttling_data.periods }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'cpu_throttling_throttled_periods' }}</td>-->
+  <!--<td>{{ ::stats.cpu_stats.throttling_data.throttled_periods }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'cpu_throttling_throttled_time' }}</td>-->
+  <!--<td>{{ ::stats.cpu_stats.throttling_data.throttled_time }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_usage' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.usage }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_max_usage' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.max_usage }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_active_anon' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.stats.active_anon }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_active_file' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.stats.active_file }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_cache' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.stats.cache }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_hierarchical_memory_limit' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.stats.hierarchical_memory_limit }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_inactive_anon' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.stats.inactive_anon }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_inactive_file' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.stats.inactive_file }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_mapped_file' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.stats.mapped_file }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_pgfault' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.stats.pgfault }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_pgpgin' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.stats.pgpgin }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_pgpgout' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.stats.pgpgout }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_rss' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.stats.rss }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_rss_huge' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.stats.rss_huge }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_unevictable' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.stats.unevictable }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_writeback' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.stats.writeback }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_failcnt' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.failcnt }}</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+  <!--<td>{{ ::'memory_limit' }}</td>-->
+  <!--<td>{{ ::stats.memory_stats.limit }}</td>-->
+  <!--</tr>-->
+  <!--</tbody>-->
+  <!--</table>-->
+  <!--</div>-->
+  <!--</div>-->
+  <!--</div>-->
+  <!--</div>-->
+</div>
+

@@ -1,0 +1,41 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+  <div class="sidebar-collapse">
+    <ul side-navigation class="nav metismenu" id="side-menu">
+      <li class="nav-header">
+        <div class="dropdown profile-element" uib-dropdown>
+          <span><img src="app/img/profile_small.jpg" alt="Image" class="img-circle"></span>
+          <a class="dropdown-toggle" uib-dropdown-toggle href>
+            <span class="clear">
+              <span class="block m-t-xs">
+                <strong class="font-bold">{{session.nick}}</strong>
+             </span>
+            <span class="text-muted text-xs block">Simple Menu<b class="caret"></b></span>
+          </a>
+          <ul uib-dropdown-menu class="dropdown-menu animated fadeInRight m-t-xs">
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </div>
+        <div class="logo-element">KMP</div>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="index.main"><i class="fa fa-diamond"></i> <span class="nav-label">Dashboard</span> </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="index.app_group_list"><i class="fa fa-bell"></i> <span class="nav-label">{{ ::'应用分组' }}</span> </a>
+      </li>
+      <li ng-class="{active: $state.includes('setting')}">
+        <a><i class="fa fa-legal"></i> <span class="nav-label">{{ ::'设置' }}</span><span class="fa fa-arrow"></span></a>
+        <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('setting')}">
+          <li ui-sref-active="active"><a ui-sref="setting.image">{{ ::'镜像' }}</a></li>
+          <li ui-sref-active="active"><a ui-sref="setting.template">{{ ::'云os类型' }}</a></li>
+          <li ui-sref-active="active"><a ui-sref="setting.zone">{{ ::'Zone' }}</a></li>
+          <li ui-sref-active="active"><a ui-sref="setting.ip_pool">{{ ::'IP池' }}</a></li>
+          <li ui-sref-active="active"><a ui-sref="setting.ip">{{ ::'IP' }}</a></li>
+          <li ui-sref-active="active"><a ui-sref="setting.host">{{ ::'宿主机' }}</a></li>
+          <li ui-sref-active="active"><a ui-sref="setting.pod">{{ ::'Pod' }}</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+
